@@ -6,42 +6,50 @@
   <title>I Love You Kittu 💖</title>
   <style>
     body {
+      margin: 0;
       background: linear-gradient(to right, #ffd1dc, #ffe6f2);
       font-family: 'Comic Sans MS', cursive;
       text-align: center;
-      padding: 30px;
       overflow: hidden;
       transition: opacity 1s ease;
     }
 
-    .cartoon {
-      width: 180px;
+    .cartoon-container {
+      position: relative;
       animation: float 2s ease-in-out infinite;
-      margin-bottom: 20px;
+      margin-top: 50px;
     }
 
-    @keyframes float {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+    .cartoon-container img {
+      width: 220px;
     }
 
     .love-button {
-      font-size: 24px;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 20px;
       background-color: #ff69b4;
       color: white;
       border: none;
-      border-radius: 50px;
-      padding: 20px 40px;
+      border-radius: 40px;
+      padding: 15px 30px;
       cursor: pointer;
       box-shadow: 0 0 20px #ff1493;
       animation: throb 1.2s infinite;
-      position: relative;
       overflow: hidden;
       transition: transform 0.2s ease;
+      z-index: 10;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
 
     @keyframes throb {
-      0%,100% { transform: scale(1); }
+      0%, 100% { transform: scale(1); }
       50% { transform: scale(1.1); }
     }
 
@@ -80,17 +88,15 @@
 
     .counter {
       font-size: 18px;
-      margin-top: 10px;
+      margin-top: 20px;
       color: #b30059;
     }
 
     .final-gif {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
       background: #000000ee;
       z-index: 1000;
       display: flex;
@@ -116,26 +122,24 @@
   </style>
 </head>
 <body id="pageContent">
-  <!-- Floating Cartoon Holding the Button -->
-  <img class="cartoon" src="711f384dff486fdbad35cdf258188b2feafaaad6.gif" alt="Cute Cartoon" />
 
-  <!-- I Love You Button -->
-  <button class="love-button" id="loveButton">I love you 10x</button>
-  <div class="counter" id="loveCounter"></div>
+  <div class="cartoon-container">
+    <img src="711f384dff486fdbad35cdf258188b2feafaaad6.gif" alt="Cartoon Holding Button">
+    <button class="love-button" id="loveButton">I love you 10x</button>
+  </div>
 
-  <!-- Final Fullscreen Love GIF -->
+  <div class="counter" id="loveCounter">10x kisses for you 💋</div>
+
   <div class="final-gif" id="finalGif">
-    <img src="bears-hug-love-you.gif" alt="I Love You So Much GIF" />
+    <img src="bears-hug-love-you.gif" alt="I Love You So Much" />
     <div>I love you so much 💗</div>
   </div>
 
-  <!-- Background Music -->
   <audio id="bgMusic" autoplay loop>
     <source src="the-ronettes-be-my-baby_WuyP7L3e (mp3cut.net) (1).mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 
-  <!-- JavaScript for Interactions -->
   <script>
     const button = document.getElementById("loveButton");
     const counterDisplay = document.getElementById("loveCounter");
@@ -146,33 +150,31 @@
     const values = ["10x", "20x", "30x", "40x", "50x", "60x", "70x", "80x", "90x", "100x", "♾️"];
     let index = 0;
 
-    // Start music on first click/tap
     window.addEventListener('click', () => music.play().catch(() => {}), { once: true });
 
-    // Button click event
-    button.addEventListener("click", function(e) {
+    button.addEventListener("click", function (e) {
       index++;
       if (index < values.length) {
         button.innerText = `I love you ${values[index]}`;
         counterDisplay.innerText = `${values[index]} kisses for you 💋`;
       }
 
-      // Sparkle on each tap
+      // Sparkle effect
       const sparkle = document.createElement("div");
       sparkle.classList.add("sparkle");
-      sparkle.style.left = e.clientX - button.getBoundingClientRect().left + "px";
-      sparkle.style.top = e.clientY - button.getBoundingClientRect().top + "px";
+      const rect = button.getBoundingClientRect();
+      sparkle.style.left = e.clientX - rect.left + "px";
+      sparkle.style.top = e.clientY - rect.top + "px";
       button.appendChild(sparkle);
       setTimeout(() => sparkle.remove(), 600);
 
-      // Final stage: ♾️
+      // Final stage
       if (values[index] === "♾️") {
         const bigSparkle = document.createElement("div");
         bigSparkle.classList.add("big-sparkle");
         document.body.appendChild(bigSparkle);
         setTimeout(() => bigSparkle.remove(), 1500);
 
-        // Hide main content and show final GIF
         pageContent.classList.add("hidden");
         setTimeout(() => finalGif.style.display = "flex", 1000);
       }
